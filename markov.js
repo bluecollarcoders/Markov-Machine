@@ -12,8 +12,20 @@ class MarkovMachine {
     // set markov chains: For text of "the cat in the hat", chains will be {"the": ["cat", "hat"], "cat": ["in"], "in": ["the"], "hat": [null]}
 
     makeChains() {
-        // TODO
+        let chains = new Map();
+
+        for (let i = 0; i < this.words.length; i += 1) {
+            let word = this.words[i];
+            let nextWord = this.words[i + 1] || null;
+
+            if (chains.has(word)) chains.get(word).push(nextWord);
+            else chains.set(word, [nextWord]);
+        }
+
+        this.chains = chains;
     }
+
+    // Pick random choice from array
 
     // 
     makeText(numWords = 100) {
