@@ -12,6 +12,7 @@ function generateText(text) {
     console.log(mm.makeText());
 }
 
+// read file and generate text from it
 function makeText(path) {
     fs.readFile(path, "utf8", function cb(err, data) {
         if (err) {
@@ -21,4 +22,33 @@ function makeText(path) {
             generateText(data);
         }
     });
+}
+
+// read url and make text from it
+async function makeText(url) {
+    let resp;
+
+    try {
+        resp = await axios.get(url);
+    } catch (er) {
+        console.error(`Cannot read URL: ${url}: ${err}`);
+        process.exit(1);
+    }
+    generateText(resp.data)
+}
+
+// interpret cmdline to decide what to do.
+let [method, path] = process.argv.slice(2);
+
+if (method === "file") {
+    makeText(path);
+}
+
+else if (method === "url") {
+    makeText(path);
+}
+
+else {
+    console.error(`Unknown method: ${method}`);
+    process.exit(1);
 }
